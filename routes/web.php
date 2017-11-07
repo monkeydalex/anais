@@ -10,20 +10,32 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
-
+Auth::routes();
 Route::get('/', function () {
     return view('accueil', ['name' => 'Muguiwara']);
 });
 
-
-Route::get('/test', 'TestController@index');
+Route::resource('sites', 'SiteController');
+Route::get('/Relation/N:N', 'TestController@relation');
 
 
 //Route::get('/locate', 'DeploiementController@index');
 
-Route::get('deploiement', 'DeploiementController@index');
-Route::post('deploiement', 'DeploiementController@store');
-Route::get('deploiement-list', 'DeploiementController@list');
+Route::middleware(['auth'])->group(function () {
+    /*Route::get('/', function () {
+        // Uses first & second Middleware
+    });*/
+    Route::resource('users', 'UserController');
+	Route::get('deploiement', 'DeploiementController@index');
+	Route::post('deploiement', 'DeploiementController@store');
+	Route::get('deploiement-list', 'DeploiementController@list');
+        // Uses first & second Middleware
+});
+
+        /*
+        $colonne = "nom_site";
+        $tri = "asc";
+		*/
 
 Route::get('items-list', 'ItemController@list');
 Route::get('items', 'ItemController@index');
@@ -31,5 +43,5 @@ Route::get('items-list/{id}', 'ItemController@destroy');
 Route::post('items/import', 'ItemController@import');
 Route::get('items/export/{type}', 'ItemController@export');
 
-Auth::routes();
+
 Route::get('/home', 'HomeController@index')->name('home');
